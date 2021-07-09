@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: crud-app-backend
+    version: 1.0.0-SNAPSHOT
+    description: crud app for employee services which returns data on request
+
+---
+spring:
+  jpa:
+    showSql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/crudapp
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+
+# exposing all the actuators including shutdown for testing purpose only
+# NOTE: On production this should be secured
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+endpoints:
+  shutdown:
+    enabled: true
+
+info:
+  appName: ${spring.application.name}
+  descripton: ${spring.application.description}
+  version: ${spring.application.version}

@@ -1,0 +1,45 @@
+<div class="panel-default">
+    <div class="panel-header">
+        <span class="panel-title"> Edit Employee</span>
+    </div>
+    <div class="panel-body">
+        <form [formGroup]="employeeForm" (ngSubmit)="editEmployee(employeeForm)" novalidate>
+
+            <div class="row form-group">
+                <div class="col-md-4"><label for="empId" class="field-label text-muted">Employee ID</label></div>
+                <div class="col-md-8">
+                    <input type="text" name="empId" id="empId" formControlName="empId" class="form-control"
+                        placeholder="Enter EmpId" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4"><label for="name" class="field-label text-muted">Name</label></div>
+                <div class="col-md-8">
+                    <input type="text" name="name" id="name" formControlName="name" class="form-control"
+                        placeholder="Enter Name" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4"><label for="age" class="field-label text-muted">Age</label></div>
+                <div class="col-md-8">
+                    <input type="number" name="age" id="age" formControlName="age" class="form-control"
+                        placeholder="Enter Age" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4"><label for="email" class="field-label text-muted">Email</label></div>
+                <div class="col-md-8">
+                    <input type="email" name="email" id="email" formControlName="email" class="form-control"
+                        placeholder="Enter Email" />
+                </div>
+            </div>
+
+            <div class="row col-md-3 center">
+                <button class="btn btn-primary" type="submit"> Update </button>
+            </div>
+        </form>
+    </div>
+</div>
