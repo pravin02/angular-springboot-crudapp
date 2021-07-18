@@ -1,0 +1,48 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
+  }
+}
+
+apply plugin: 'base'
+apply plugin: 'com.moowork.node'
+
+node {
+  version = '12.6.0'
+  npmVersion = '6.9.0'
+  download = true
+}
+
+task packageNpmApp(type: Zip) {
+  dependsOn npm_run_build
+  extension 'jar'
+  destinationDir file("${projectDir}/dist/frontend")
+  from('build') {
+    // optional path under which output will be visible in Java classpath, e.g. static resources path
+    into 'static'
+  }
+}
+
+configurations {
+  npmResources
+}
+configurations.default.extendsFrom(configurations.npmResources)
+assemble.dependsOn packageNpmApp
+
+artifacts {
+  npmResources(packageNpmApp.archivePath) {
+    builtBy packageNpmApp
+    type "jar"
+  }
+}
+
+clean {
+  delete packageNpmApp.archivePath
+  delete file("${projectDir}/dist/frontend")
+}
