@@ -8,13 +8,17 @@ import { ShipListComponent } from "./components/ship-list/ship-list.component";
 import { ShipService } from "./services/ship.service";
 import { ShipRoutingModule } from "./ship-routing.module";
 import ShipComponent from "./ship.component";
+import { MenuComponent } from './menu/menu.component';
+import { ActionComponent } from "../core/shared/components/action.component";
 
 @NgModule({
     declarations: [
+        MenuComponent,
         ShipComponent,
         ShipListComponent,
         ShipAddComponent,
-        ShipEditComponent
+        ShipEditComponent,
+        ActionComponent
     ],
     providers: [ShipService],
     imports: [
@@ -22,6 +26,7 @@ import ShipComponent from "./ship.component";
         ShipRoutingModule,
         HttpClientModule,
         ReactiveFormsModule
-    ]
+    ],
+    bootstrap: [ShipComponent]
 })
 export class ShipModule { }

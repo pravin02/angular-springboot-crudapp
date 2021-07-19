@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MenuComponent } from './menu/menu.component';
+import { MenuComponent } from './ship/menu/menu.component';
 import { ShipAddComponent } from './ship/components/ship-add/ship-add.component';
 import { ShipEditComponent } from './ship/components/ship-edit/ship-edit.component';
 import { ShipListComponent } from './ship/components/ship-list/ship-list.component';

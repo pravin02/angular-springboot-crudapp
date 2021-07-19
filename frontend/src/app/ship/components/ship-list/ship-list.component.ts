@@ -24,7 +24,15 @@ export class ShipListComponent implements OnInit {
   constructor(private shipService: ShipService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getShipList(this.page);
+    //this.getShipList(this.page);
+    this.ships = [
+      {
+        code: 'fddfd',
+        name: 'dfdfd',
+        length: 2,
+        width: 3
+      }
+    ]
   }
 
   getShipList(page: Page) {

@@ -21,10 +21,11 @@
                                 <td>{{ship.length}} </td>
                                 <td>{{ship.width}} </td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary" (click)="editShip(ship.code)"> Edit
+                                    <app-actions [isDeleteEnabled]="true" [isEditEnabled]="true"></app-actions>
+                                    <!-- <button class="btn btn-sm btn-primary" (click)="editShip(ship.code)"> Edit
                                     </button>
                                     <button class="btn btn-sm btn-danger" (click)="deleteShip(ship.code)"> Delete
-                                    </button>
+                                    </button> -->
                                 </td>
                             </tr>
                         </tbody>
