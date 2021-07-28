@@ -1,15 +1,20 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
     <div class="container-fluid">
-        <a class="navbar-brand" routerLink="/ship/">{{title}}</a>
+        <a class="navbar-brand" routerLink="/ships/">{{title}}</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" routerLink="/ship/list">Ship List</a>
+                    <a class="nav-link" routerLink="/ships/list">Ship List</a>
                 </li>
 
                 <li class="nav-item active">
-                    <a class="nav-link" routerLink="/ship/add">Add New Ship</a>
+                    <a class="nav-link" routerLink="/ships/add">Add New Ship</a>
                 </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">{{loggedInUser}} </li> <span class="clearfix"></span>
+                <li class="nav-item" (click)="logOut()"> <a class="nav-link">Log Out </a></li>
             </ul>
         </div>
     </div>

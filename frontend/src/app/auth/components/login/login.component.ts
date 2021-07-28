@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
@@ -7,6 +7,8 @@ import { Constants } from '../../../core/constants';
 
 import { StorageService } from '../../../core/services/storage.service';
 import { AuthService } from '../../services/auth.service';
+import { User } from "../../user.model";
+
 
 
 @Component({
@@ -17,6 +19,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent implements OnInit {
 
   public authForm: FormGroup;
+  isLoggedIn = false;
 
   constructor(
     private fb: FormBuilder,
@@ -24,45 +27,50 @@ export class LoginComponent implements OnInit {
     private storageService: StorageService,
     private route: ActivatedRoute,
     private router: Router,
-    private toasterService: ToastrService
+    private toasterService: ToastrService,
   ) {
     this.authForm = this.fb.group({
-      username: '',
-      password: ['']
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
 
   ngOnInit(): void {
   }
 
+  get username() {
+    return this.authForm.get('username');
+  }
+  get password() {
+    return this.authForm.get('password');
+  }
 
   login(authForm: FormGroup) {
     if (authForm.valid) {
-      this.authService.login(authForm.value.username, authForm.value.password)
+      let user: User = authForm.value;
+      this.authService.authenticate(user)
         .subscribe(response => {
-          if (response.status) {
-            alert(response.message);
+          if (response.token) {
             this.authForm.reset();
-            this.updateToken(response.data);
+            this.updateToken(response.token);
+            this.toasterService.success("You logged in successfully.", Constants.TITLE_SUCCESS);
           } else {
-            alert(response.message);
+            this.toasterService.error("Invalid username or password", Constants.TITLE_ERROR);
           }
         }, error => {
           this.toasterService.error('Error while login', Constants.TITLE_ERROR);
-          this.updateToken({});
         });
     } else {
-      alert("Please fill form, something is missing or invalid");
+      this.toasterService.warning("Please fill form, something is missing or invalid", Constants.TITLE_ERROR);
     }
   }
 
   updateToken(data: any) {
-    this.storageService.setAccessToken('token');
-    this.storageService.setRefreshToken('token');
+    this.storageService.setAccessToken(data);
     this.route.queryParams
       .subscribe(params => {
         let url = params.returnUrl;
-        if (!url) { url = '/ship'; }
+        if (!url) { url = '/ships'; }
         this.router.navigate([url]);
       });
   }

@@ -4,18 +4,24 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs';
 
 import { environment } from "../../../environments/environment";
+import { Response } from "../../utils/response.model";
+import { User } from "../user.model";
 
 
 @Injectable()
 export class AuthService {
 
-    private apiServerUrl = environment.apiBaseUrl;
+  private apiServerUrl = environment.apiBaseUrl;
 
-    constructor(private http: HttpClient) {
-    }
+  constructor(private http: HttpClient) {
+  }
 
-    login(username: string, password: string): Observable<any> {
-        return this.http.post<any>(`${this.apiServerUrl}/login`, { username, password });
-    }
+  authenticate(user: User): Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/users/authenticate`, user);
+  }
+
+  getToken() {
+    return localStorage.getItem('token');
+  }
 
 }

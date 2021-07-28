@@ -3,39 +3,37 @@ server:
 
 spring:
   application:
-    name: crud-app-backend
+    name: ship-service
     version: 1.0.0-SNAPSHOT
-    description: crud app for employee services which returns data on request
-
----
-spring:
+    description: Ship service provides the facility to add, update, remove and view the ship details on request
   jpa:
     showSql: true
     hibernate:
       ddl-auto: update
-  datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/crudapp
-    username: ${DB_USER}
-    password: ${DB_PASS}
-  properties:
-    hibernate:
-      dialect: org.hibernate.dialect.MySQLDialect
-
-# exposing all the actuators including shutdown for testing purpose only
-# NOTE: On production this should be secured
-management:
-  endpoint:
-    shutdown:
+    generate-ddl: true
+  h2:
+    console:
       enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: '*'
+      path: /h2
+  datasource:
+    url: jdbc:h2:file:~/ship-db
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  sql:
+    init:
+      mode: always
 
-endpoints:
-  shutdown:
-    enabled: true
+jwt:
+  token:
+    validity: 180000
+    prefix: Bearer
+  signing:
+    key: PUT_YOUR_KEY_HERE
+  header:
+    string: Authorization
+  authorities:
+    key: roles
 
 info:
   appName: ${spring.application.name}

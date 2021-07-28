@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { Constants } from '../../../core/constants';
 
 import { ShipService } from '../../services/ship.service';
 import { Ship } from '../../ship.model';
@@ -17,17 +19,19 @@ export class ShipEditComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private shipService: ShipService,
     private activateRoute: ActivatedRoute,
+    private toastrService: ToastrService,
     private router: Router) {
     this.shipForm = this.fb.group({
-      code: '',
-      name: [''],
-      length: [''],
-      width: [''],
+      shipCode: ['', Validators.required],
+      shipName: ['', Validators.required],
+      shipLengthInMeters: ['', Validators.required],
+      shipWidthInMeters: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.activateRoute.params.subscribe(response => this.getShip(response.id));
+    this.shipForm.get('shipCode')?.disable();
   }
 
   getShip(shipCode: string) {
@@ -36,30 +40,29 @@ export class ShipEditComponent implements OnInit {
         if (response.status) {
           this.shipForm.patchValue(response.data);
         } else {
-          alert(response.message);
+          this.toastrService.error(response.message && 'Error while fetching ship details', Constants.TITLE_ERROR);
         }
       }, error => {
-        alert("Error while fetching ship details");
+        this.toastrService.error("Error while updating ship", Constants.TITLE_ERROR);
       });
   }
 
-
   editShip(shipForm: FormGroup) {
     if (shipForm.valid) {
-      let ship: Ship = shipForm.value;
+      let ship: Ship = shipForm.getRawValue();
       this.shipService.editShip(ship)
         .subscribe(response => {
           if (response.status) {
-            alert(response.message);
-            this.router.navigate(['ship/list']);
+            this.toastrService.success(response.message, Constants.TITLE_SUCCESS);
+            this.router.navigate(['ships/list']);
           } else {
-            alert(response.message);
+            this.toastrService.error(response.message, Constants.TITLE_ERROR);
           }
         }, error => {
-          alert("Error while adding ship");
+          this.toastrService.error("Error while updating ship", Constants.TITLE_ERROR);
         });
     } else {
-      alert("Please fill form, something is missing or invalid");
+      this.toastrService.error("Please fill form, something is missing or invalid", Constants.TITLE_ERROR);
     }
   }
 

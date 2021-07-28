@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 
 import { Ship } from '../../ship.model';
 import { ShipService } from '../../services/ship.service';
-import Page from 'src/app/models/page.model';
+import Page from '../../../models/page.model';
+import { ToastrService } from 'ngx-toastr';
+import { Constants } from '../../../core/constants';
+
 
 @Component({
   selector: 'app-ship-list',
@@ -21,26 +24,23 @@ export class ShipListComponent implements OnInit {
   };
 
 
-  constructor(private shipService: ShipService, private router: Router) { }
+  constructor(private shipService: ShipService,
+    private toastrService: ToastrService,
+    private router: Router) { }
 
   ngOnInit(): void {
-    //this.getShipList(this.page);
-    this.ships = [
-      {
-        code: 'fddfd',
-        name: 'dfdfd',
-        length: 2,
-        width: 3
-      }
-    ]
+    this.getShipList();
   }
 
-  getShipList(page: Page) {
-    this.shipService.getShipList(page)
+  getShipList() {
+    this.shipService.getShipList()
       .subscribe(response => {
         this.ships = response;
+        if (!this.ships.length) {
+          this.toastrService.error("Their are no records as of now", Constants.TITLE_ERROR);
+        }
       }, error => {
-        console.log("Error Occured", error);
+        this.toastrService.error("Error while fetching ship list", Constants.TITLE_ERROR);
       });
   }
 
@@ -48,18 +48,19 @@ export class ShipListComponent implements OnInit {
     this.shipService.deleteShip(shipCode)
       .subscribe(response => {
         if (response.status) {
-          alert(response.message);
-          this.getShipList(this.page);
+          this.toastrService.success(response.message, Constants.TITLE_SUCCESS);
+          this.getShipList();
         } else {
-          alert(response.message);
+          this.toastrService.error(response.message, Constants.TITLE_ERROR);
         }
       }, error => {
-        console.log("Error Occured", error);
+        this.toastrService.error("Error while adding ship details", Constants.TITLE_ERROR);
       });
   }
 
-  editShip(shipCode: string) {
-    this.router.navigate(['ship/edit', shipCode]);
+
+  goToEditShip(shipCode: string) {
+    this.router.navigate(['ships/update', shipCode]);
   }
 
 }
